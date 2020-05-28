@@ -1,2 +1,5 @@
-f = [[1.0] * 1] * 2
-print(f[0][0])
+from model import calcProbability
+
+
+calcProbability(["how", "is", "this", "such", "a", "great", "thing"])
+

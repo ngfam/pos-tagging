@@ -2,7 +2,7 @@ from word_tag_prepare import TrieCreator
 from training_data_reader import reader
 import math
 
-inf = -100000000
+inf = -100000000.0
 
 creator = TrieCreator()
 wordTrie = creator.getTrie()
@@ -10,6 +10,7 @@ wordTrie.build()
 
 datas = reader(wordTrie)
 ngram = datas.process()
+
 
 def calcProbability(sentence):
     sentence.append('</s>')
@@ -24,11 +25,6 @@ def calcProbability(sentence):
 
     f[0] = [[0.0]]
     trace[0] = [[0]]
-
-    previous1 = "<s>"
-    previous2 = "</s>"
-    
-#    print(tags)
 
     bestx = 0
     besty = 0
@@ -51,20 +47,29 @@ def calcProbability(sentence):
         f[i + 1] = [[inf] * len(tag)] * len(tag1)
         trace[i + 1] = [[0] * len(tag)] * len(tag1)
 
+        f[i + 1] = [[]] * len(tag1)
+        trace[i + 1] = [[]] * len(tag1)
+
+        for j in range(len(tag1)):
+            f[i + 1][j] = [inf] * len(tag)
+            trace[i + 1][j] = [0] * len(tag)
+
         for j in range(len(tag1)):
             for k in range(len(tag)):
                 for h in range(len(tag2)):
+
                     prob = tag[k][1]
                     coherence = ngram.query(tag2[h][0], tag1[j][0], tag[k][0])
-                    finalProb = coherence * prob
+                    finalProb = (coherence) * math.pow(prob * prob * coherence, 1/3)
                     if word == "<unk>":
-                        finalProb = ((coherence + prob) / 2) * prob
-                    finalProb = math.log2(finalProb)
+                        finalProb = coherence * math.pow(prob * coherence * coherence, 1/3)
 
+                    finalProb = math.log2(finalProb)
+       
                     if f[i][h][j] + finalProb > f[i + 1][j][k]:
                         f[i + 1][j][k] = f[i][h][j] + finalProb
                         trace[i + 1][j][k] = h
-                    
+                
                     if i == n - 1:
                         if f[i + 1][j][k] > f[i + 1][bestx][besty]:
                             bestx = j
@@ -81,8 +86,5 @@ def calcProbability(sentence):
     tagResult.reverse()
     print(tagResult)
 
-calcProbability(["this", "is", "very", "good"])
 
-
-    
 

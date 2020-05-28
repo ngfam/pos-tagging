@@ -15,8 +15,8 @@ class TrieCreator:
                     count += 1
                     continue
 
-                if count > 100000:
-                    break
+                # if count > 100000:
+                #     break
 
                 count = count + 1
                 after = row[3].lower()

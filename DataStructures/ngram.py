@@ -40,10 +40,12 @@ class ngram:
     
     def query(self, x, y, z):
         result = 0
+        # print((get(self.unigram, z) + delta) / (self.total + self.vocab_count() * delta))
+
         # print(get(self.unigram, z) + 1, get(self.bigram, (y, z)) + 1, get(self.trigram, (x, y, z)) + 1)
-        result += alpha * (get(self.unigram, z) + delta) / (self.vocab_count() + self.total * delta)
-        result += beta * (get(self.bigram, (y, z)) + delta) / (self.vocab_count() + get(self.one, y) * delta)
-        result += theta * (get(self.trigram, (x, y, z)) + delta) / (self.vocab_count() + get(self.two, (x, y)) * delta)
+        result += alpha * (get(self.unigram, z) + delta) / (self.total + self.vocab_count() * delta)
+        result += beta * (get(self.bigram, (y, z)) + delta) / (self.vocab_count() * delta+ get(self.one, y))
+        result += theta * (get(self.trigram, (x, y, z)) + delta) / (self.vocab_count() * delta + get(self.two, (x, y)))
         return result
     
 
