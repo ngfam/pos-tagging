@@ -64,6 +64,7 @@ def calcProbability(sentence):
                     if word == "<unk>":
                         finalProb = coherence * math.pow(prob * coherence * coherence, 1/3)
 
+                    #using log2 to easily sum up all the probabilities
                     finalProb = math.log2(finalProb)
        
                     if f[i][h][j] + finalProb > f[i + 1][j][k]:
@@ -88,3 +89,9 @@ def calcProbability(sentence):
 
 
 
+### for unknown words, ig that it would be fair to have its probability for every tag equal 
+### to the probability that each tag has appeared in the whole corpus
+### but since its unknown, it looks better to have a larger contribution of the coherence probability
+### to the final probability
+### so estimated prob = (coherence) * cuberoot(coherence ^ 2 * wordtag)
+### for known words, due to the properties of the corpus, each word should have its word-tag probability share higher than the coherence

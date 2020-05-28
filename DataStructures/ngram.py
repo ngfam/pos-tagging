@@ -1,8 +1,10 @@
 # end of sentence should be > and start of sentence should be <
 
-alpha = 1 / 2
+
+### apparently having a high share of trigram probability makes the model wrose
+alpha = 1 / 3
 beta = 1/ 3
-theta = 1/ 6
+theta = 1/ 3
 delta = 0.2
 
 def increase(mp, key):
@@ -22,7 +24,6 @@ class ngram:
         self.trigram = dict()
         self.bigram = dict()
         self.unigram = dict()
-
         self.one = dict()
         self.two = dict()
     
@@ -37,12 +38,10 @@ class ngram:
         increase(self.trigram, (x, y, z))
         increase(self.one, y)
         increase(self.two, (x, y))
-    
+
+    #add k = 0.2 smoothing applied
     def query(self, x, y, z):
         result = 0
-        # print((get(self.unigram, z) + delta) / (self.total + self.vocab_count() * delta))
-
-        # print(get(self.unigram, z) + 1, get(self.bigram, (y, z)) + 1, get(self.trigram, (x, y, z)) + 1)
         result += alpha * (get(self.unigram, z) + delta) / (self.total + self.vocab_count() * delta)
         result += beta * (get(self.bigram, (y, z)) + delta) / (self.vocab_count() * delta+ get(self.one, y))
         result += theta * (get(self.trigram, (x, y, z)) + delta) / (self.vocab_count() * delta + get(self.two, (x, y)))

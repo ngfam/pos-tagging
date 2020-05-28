@@ -1,12 +1,14 @@
 import csv
 from DataStructures.Trie import Trie
 
-
 class TrieCreator:
     def getTrie(self):
         wordTrie = Trie()
+
+        ### insert tags for start and ending symbol
         wordTrie.insert("<s>", '<')
         wordTrie.insert("</s>", '>')
+
         with open("Datas/pos_training.csv") as csvFile:
             readCSV = csv.reader(csvFile, delimiter = ',')
             count = 0        

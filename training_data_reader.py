@@ -6,6 +6,7 @@ class reader:
         self.data = ngram()
         self.trieTag = trieTag
 
+### put a sentence of tags into the training set
     def add_sentence(self, sentence):
         sentence.append('>')
         previous1 = '<'
@@ -16,6 +17,7 @@ class reader:
             previous2 = c
         # print(sentence)
 
+### extract the datas
     def process(self):
         with open("Datas/pos_training.csv") as csvFile:
             readCSV = csv.reader(csvFile, delimiter = ',')
@@ -27,7 +29,6 @@ class reader:
                     continue
 
                 count = count + 1
-                id = row[1]
                 word = row[-2]
                 tag = row[-1]
 
